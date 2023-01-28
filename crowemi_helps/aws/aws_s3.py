@@ -1,6 +1,6 @@
 import boto3
 
-from aws.aws_core import AwsCore
+from crowemi_helps.aws.aws_core import AwsCore
 
 class AwsS3(AwsCore):
     def __init__(self) -> None:
