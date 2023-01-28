@@ -20,7 +20,7 @@ class AwsS3(AwsCore):
         if compress:
             content = gzip.compress(bytes(content, 'utf-8'))
 
-        return self.aws_client.put_object(Body=content, Bucket=bucket, Key=key)
+        return self.client.put_object(Body=content, Bucket=bucket, Key=key)
 
     def copy_object(self, destination_bucket: str, destination_key: str, source_bucket_key: str, storage_class: str = 'STANDARD'):
         """ Method for copying S3 objects from Glacier storage.
@@ -31,7 +31,7 @@ class AwsS3(AwsCore):
         source_bucket_key: the full key including the bucket of the object to be copied. \n
         storage_class: the storage class for the newly created object. \n
         """
-        return self.aws_client.copy_object(
+        return self.client.copy_object(
             Bucket=destination_bucket,
             CopySource=source_bucket_key,
             Key=destination_key,
@@ -49,7 +49,7 @@ class AwsS3(AwsCore):
         """
         ret = None
         try:
-            ret = self.aws_client.restore_object(
+            ret = self.client.restore_object(
                 Bucket=bucket, 
                 Key=key, 
                 RestoreRequest={'Days': restore_days, 'GlacierJobParameters': {'Tier': restore_tier}}
@@ -69,7 +69,7 @@ class AwsS3(AwsCore):
         Keyword arguments: \n
         key -- the S3 resource key.
         """
-        return self.aws_client.delete_object(Bucket=bucket, Key=key)
+        return self.client.delete_object(Bucket=bucket, Key=key)
 
     def upload_s3(self, file_to_upload: str, bucket: str, key: str, compress: bool = False):
         if compress:
@@ -78,23 +78,23 @@ class AwsS3(AwsCore):
                     shutil.copyfileobj(file_in, file_out)
                     file_to_upload = f'{file_to_upload}.gz'
 
-        return self.aws_client.upload_file(file_to_upload, bucket, key)
+        return self.client.upload_file(file_to_upload, bucket, key)
 
     def get_object(self, key: str, bucket: str):
-        return self.aws_client.get_object(Bucket=bucket, Key=key)
+        return self.client.get_object(Bucket=bucket, Key=key)
 
     def list_object(self, key: str, bucket: str):
-        return self.aws_client.list_objects_v2(Bucket=bucket, Prefix=key)
+        return self.client.list_objects_v2(Bucket=bucket, Prefix=key)
 
     def list_objects(self, prefix: str, bucket: str, next_token: str = None):
         ret = None
         if next_token:
-            ret = self.aws_client.list_objects_v2(Bucket=bucket, Prefix=prefix, ContinuationToken=next_token)
+            ret = self.client.list_objects_v2(Bucket=bucket, Prefix=prefix, ContinuationToken=next_token)
         else:
-            ret = self.aws_client.list_objects_v2(Bucket=bucket, Prefix=prefix)
+            ret = self.client.list_objects_v2(Bucket=bucket, Prefix=prefix)
 
         return ret
 
     def object_exists(self, key: str, bucket: str):
-        ret = self.aws_client.list_objects_v2(Bucket=bucket, Prefix=key)
+        ret = self.client.list_objects_v2(Bucket=bucket, Prefix=key)
         return True if ret['KeyCount'] > 0 else False
