@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "crowemi-helpers"
+version = "0.1.0"
+description = ""
+authors = ["crowemi <crowemi@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "crowemi_helpers"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+boto3 = "^1.26.55"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
