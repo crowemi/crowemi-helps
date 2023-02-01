@@ -5,8 +5,8 @@ import boto3
 from crowemi_helps.aws.aws_core import AwsCore
 
 class AwsS3(AwsCore):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, region) -> None:
+        super().__init__('s3', region)
 
     def write_s3(self, key: str, bucket: str, content: str, compress: bool = False):
         """ Method for writing content to S3.
@@ -82,6 +82,10 @@ class AwsS3(AwsCore):
 
     def get_object(self, key: str, bucket: str):
         return self.client.get_object(Bucket=bucket, Key=key)
+
+    def get_object_content(self, bucket: str, key: str) -> str:
+        obj = self.resource.Object(bucket, key)
+        return obj.get()['Body'].read().decode('utf-8')
 
     def list_object(self, key: str, bucket: str):
         return self.client.list_objects_v2(Bucket=bucket, Prefix=key)
