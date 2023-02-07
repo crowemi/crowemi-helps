@@ -9,13 +9,15 @@ class TestAws(unittest.TestCase):
         pass
 
     def test_s3_get_object(self):
-        s3 = AwsS3('us-west-2')
+        s3 = AwsS3(region="us-west-2")
         obj = s3.get_object(key="manifest.json", bucket="crowemi-trades")
         assert obj
 
     def test_s3_get_object_contents(self):
-        s3 = AwsS3('us-west-2')
-        obj_contents = s3.get_object_content(bucket="crowemi-trades", key="manifest.json")
+        s3 = AwsS3("us-west-2")
+        obj_contents = s3.get_object_content(
+            bucket="crowemi-trades", key="manifest.json"
+        )
         assert obj_contents
         obj = json.loads(obj_contents)
         assert len(obj) >= 1

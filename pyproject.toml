@@ -9,6 +9,7 @@ packages = [{include = "crowemi_helps"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 boto3 = "^1.26.55"
+black = "^23.1.0"
 
 [build-system]
 requires = ["poetry-core"]
