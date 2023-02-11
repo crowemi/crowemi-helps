@@ -8,7 +8,7 @@ from crowemi_helps.aws.aws_core import AwsCore
 class AwsS3(AwsCore):
     def __init__(
         self,
-        region: str = None,
+        region: str = "us-west-2",
         endpoint_url: str = None,
         aws_access_key_id: str = None,
         aws_secret_access_key: str = None,
