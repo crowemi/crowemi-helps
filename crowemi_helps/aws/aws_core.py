@@ -13,17 +13,27 @@ class AwsCore:
     ) -> None:
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", None)
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", None)
-        self.resource = boto3.resource(
-            service_name=type,
-            region_name=region,
-            endpoint_url=endpoint_url,
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-        )
-        self.client = boto3.client(
-            service_name=type,
-            region_name=region,
-            endpoint_url=endpoint_url,
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-        )
+        if aws_access_key_id and aws_secret_access_key:
+            self.resource = boto3.resource(
+                service_name=type,
+                region_name=region,
+                endpoint_url=endpoint_url,
+                aws_access_key_id=aws_access_key_id,
+                aws_secret_access_key=aws_secret_access_key,
+            )
+            self.client = boto3.client(
+                service_name=type,
+                region_name=region,
+                endpoint_url=endpoint_url,
+                aws_access_key_id=aws_access_key_id,
+                aws_secret_access_key=aws_secret_access_key,
+            )
+        else:
+            self.resource = boto3.resource(
+                service_name=type,
+                region_name=region,
+            )
+            self.client = boto3.client(
+                service_name=type,
+                region_name=region,
+            )
